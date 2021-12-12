@@ -1,4 +1,4 @@
-use std::{time, collections::{HashMap, VecDeque}, cell::RefCell};
+use std::{time, collections::{HashMap}, cell::RefCell};
 
 use aoc_helper::load_input;
 
@@ -66,7 +66,7 @@ enum Mode {
 enum ReturnType {
     Wall(usize, usize),
     // Fall(usize, usize),
-    Falling,
+    // Falling,
     Filled,
     Abyss
 }
@@ -91,13 +91,13 @@ fn part1(water_map: WaterMap) {
     println!("Part1: {}", res);
 }
 
-fn sim(water_map: &WaterMap, mode: Mode, x: usize, mut y:usize, max_y:usize) -> ReturnType {
+fn sim(water_map: &WaterMap, mode: Mode, x: usize, y:usize, max_y:usize) -> ReturnType {
     println!("x,y = {},{} {:?}", x, y, mode);
     match mode {
         LookSide(right) => {
             let look_x = if right { x + 1 } else { x - 1 };
             // check for waterfall
-            let mut down =  *water_map.borrow_mut().entry((x,y+1)).or_insert(Flowing);
+            let down =  *water_map.borrow_mut().entry((x,y+1)).or_insert(Flowing);
             if down == Flowing { 
                 let down_sim = sim(water_map, LookDown ,x, y+1, max_y);
                 if down_sim != Filled { return down_sim }
@@ -130,10 +130,11 @@ fn sim(water_map: &WaterMap, mode: Mode, x: usize, mut y:usize, max_y:usize) -> 
                             // y -= 2;
                         }
                         // (Filled,_)|(_,Filled) => { return Filled }
-                        _ => { 
-                            println!("{:?} {:?}", left, right);
-                            panic!()
-                        }
+
+                        // _ => { 
+                        //     println!("{:?} {:?}", left, right);
+                        //     panic!()
+                        // }
                     }
                 }
                 else {
@@ -165,7 +166,7 @@ fn sim(water_map: &WaterMap, mode: Mode, x: usize, mut y:usize, max_y:usize) -> 
 
 
 
-fn part2(_input: &str) {
+fn _part2(_input: &str) {
 }
 
 #[cfg(test)]
