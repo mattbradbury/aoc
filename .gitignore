@@ -1,0 +1,5 @@
+/.vscode
+/Cargo.lock
+/input
+/target
+/temp

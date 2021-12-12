@@ -1,0 +1,11 @@
+[package]
+name = "aoc_helper"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+reqwest= { version = "0.11", features = ["blocking"] } 
+clap = "2"
+dirs = "4.0"
+chrono = "0.4"
+itertools = "0.10.1"
