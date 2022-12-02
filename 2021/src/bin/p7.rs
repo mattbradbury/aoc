@@ -12,7 +12,10 @@ fn main() {
     bench(|| part2(&input));
 }
 
-fn bench<F>(f: F) where F: Fn() {
+fn bench<F>(f: F)
+where
+    F: Fn(),
+{
     let t0 = time::Instant::now();
     let ret = f();
     println!("time used {:?}", time::Instant::now().duration_since(t0));
@@ -32,40 +35,50 @@ fn part2(input: &[usize]) {
 }
 
 fn parse_input(input: &str) -> Vec<usize> {
-    input.split(',').map(|v| {
-        // println!("v= {}", v);
-        v.parse().unwrap()
-    }).collect() 
+    input
+        .split(',')
+        .map(|v| {
+            // println!("v= {}", v);
+            v.parse().unwrap()
+        })
+        .collect()
 }
 
 fn find_optimal(input: &[usize], part2: bool) -> usize {
     let (min, max) = if let itertools::MinMaxResult::MinMax(min, max) = input.iter().minmax() {
         (*min, *max)
-    } else { panic!() }; 
-    (min..=max).map(|pos| {
-        match part2 {
+    } else {
+        panic!()
+    };
+    (min..=max)
+        .map(|pos| match part2 {
             false => get_cost(&input, pos),
-            true  => get_sluggish_cost(&input, pos)
-        }
-    }).min().unwrap()
-
+            true => get_sluggish_cost(&input, pos),
+        })
+        .min()
+        .unwrap()
 }
 
 fn get_cost(input: &[usize], pos: usize) -> usize {
-    input.iter().map(|v| (*v as isize -pos as isize).abs() as usize).sum()
+    input
+        .iter()
+        .map(|v| (*v as isize - pos as isize).abs() as usize)
+        .sum()
 }
 
 fn get_sluggish_cost(input: &[usize], pos: usize) -> usize {
-    input.iter().map(|v| {
-        let dist = (*v as isize -pos as isize).abs() as usize;
-        (dist * dist + 1) / 2
-    }).sum()
+    input
+        .iter()
+        .map(|v| {
+            let dist = (*v as isize - pos as isize).abs() as usize;
+            (dist * dist + 1) / 2
+        })
+        .sum()
 }
-
 
 #[cfg(test)]
 mod tests {
-    use crate::{parse_input, find_optimal};
+    use crate::{find_optimal, parse_input};
 
     const EXAMPLE: &str = "16,1,2,0,4,2,7,1,2,14";
 

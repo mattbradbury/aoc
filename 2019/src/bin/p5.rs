@@ -1,4 +1,4 @@
-use std::{time, str::FromStr};
+use std::{str::FromStr, time};
 
 use aoc_2019::computer::{Computer, Intcodes};
 use aoc_helper::load_input;
@@ -21,7 +21,9 @@ fn part1() {
     let mut comp = Computer::load(code).start().unwrap();
     comp = comp.input(1).unwrap();
     let mut result = Vec::new();
-    while let Some(out) = comp.output() { result.push(out) };
+    while let Some(out) = comp.output() {
+        result.push(out)
+    }
     println!("{:#?}", result)
 }
 
@@ -30,7 +32,9 @@ fn part2() {
     let mut comp = Computer::load(code).start().unwrap();
     comp = comp.input(5).unwrap();
     let mut result = Vec::new();
-    while let Some(out) = comp.output() { result.push(out) };
+    while let Some(out) = comp.output() {
+        result.push(out)
+    }
     println!("{:#?}", result)
 }
 

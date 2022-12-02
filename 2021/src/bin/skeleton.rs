@@ -1,6 +1,5 @@
-use std::{time, fmt::Display};
-
 use aoc_helper::load_input;
+use std::{fmt::Display, time};
 
 fn main() {
     let input = load_input(2021, 0);
@@ -9,7 +8,11 @@ fn main() {
     println!("Part2: {}", bench(|| part2(&input)));
 }
 
-fn bench<F, T>(f: F) -> T where F: FnOnce() -> T , T:Display {
+fn bench<F, T>(f: F) -> T
+where
+    F: FnOnce() -> T,
+    T: Display,
+{
     let t0 = time::Instant::now();
     let ret = f();
     println!("time used {:?}", time::Instant::now().duration_since(t0));
@@ -18,9 +21,7 @@ fn bench<F, T>(f: F) -> T where F: FnOnce() -> T , T:Display {
 }
 
 #[allow(dead_code)]
-fn parse_input(_input: &str)  {
-
-}
+fn parse_input(_input: &str) {}
 
 fn part1(_input: &str) -> usize {
     0
@@ -34,8 +35,7 @@ fn part2(_input: &str) -> usize {
 mod tests {
     use crate::{part1, part2};
 
-    const EXAMPLE: &str = 
-r#"
+    const EXAMPLE: &str = r#"
 "#;
 
     #[test]

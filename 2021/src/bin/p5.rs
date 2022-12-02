@@ -25,7 +25,7 @@ enum Mode {
     NoDiag,
 }
 
-fn find_vents(lines: Vec<(Point, Point)>, mode: Mode) -> usize {
+fn find_vents(lines: Vec<(Point<usize>, Point<usize>)>, mode: Mode) -> usize {
     let mut array = vec![vec![0; 1000]; 1000];
     // println!("{:?}", lines);
     for (a, b) in lines {
@@ -57,7 +57,7 @@ fn find_vents(lines: Vec<(Point, Point)>, mode: Mode) -> usize {
     array.iter().flatten().filter(|v| **v > 1).count()
 }
 
-fn parse_input(input: &str) -> Vec<(Point, Point)> {
+fn parse_input(input: &str) -> Vec<(Point<usize>, Point<usize>)> {
     input
         .lines()
         .map(|l| {

@@ -20,7 +20,13 @@ impl Computer {
     pub fn load(code: Intcodes) -> Self {
         let inq = VecDeque::new();
         let outq = VecDeque::new();
-        Self { code, ip: 0, state: State::Stopped, inq, outq }
+        Self {
+            code,
+            ip: 0,
+            state: State::Stopped,
+            inq,
+            outq,
+        }
     }
 
     pub fn dump(self) -> Intcodes {
@@ -31,7 +37,7 @@ impl Computer {
         self.state
     }
 
-    pub fn input(mut self, value: isize) -> Result<Computer, String>{
+    pub fn input(mut self, value: isize) -> Result<Computer, String> {
         self.inq.push_back(value);
         self.state = State::Running;
         self.run()
@@ -52,79 +58,99 @@ impl Computer {
         loop {
             let opcode = self.code[self.ip];
             match opcode % 100 {
-                1 => { // addition
-                    let (a,b,c) = self.get_params3();
+                1 => {
+                    // addition
+                    let (a, b, c) = self.get_params3();
                     // let target = code[*ip + 3];
-                    *c = a + b; 
-                    self.ip += 4 
-                }, 
+                    *c = a + b;
+                    self.ip += 4
+                }
 
-                2 => { // multiplication
-                    let (a,b,c) = self.get_params3();
-                    *c = a * b; 
-                    self.ip += 4 
-                },
+                2 => {
+                    // multiplication
+                    let (a, b, c) = self.get_params3();
+                    *c = a * b;
+                    self.ip += 4
+                }
 
-                3 => { //input
+                3 => {
+                    //input
                     let input = match self.inq.pop_front() {
                         Some(i) => i,
                         None => {
                             self.state = State::InputWait;
-                            return Ok(self)
+                            return Ok(self);
                         }
                     };
                     let target = self.code[self.ip + 1] as usize;
                     self.code[target] = input;
                     self.ip += 2;
-                },
+                }
 
                 4 => {
                     let a = self.get_param1();
                     self.outq.push_back(a);
                     self.ip += 2;
-                },
+                }
 
-                5 => { // jump-if-true
+                5 => {
+                    // jump-if-true
                     let (a, b) = self.get_params2();
-                    if a > 0 { self.ip = b as usize } else { self.ip += 3 }
-                },
+                    if a > 0 {
+                        self.ip = b as usize
+                    } else {
+                        self.ip += 3
+                    }
+                }
 
-                6 => { // jump-if-false
+                6 => {
+                    // jump-if-false
                     let (a, b) = self.get_params2();
-                    if a == 0 { self.ip = b as usize } else { self.ip += 3 }
-                },
+                    if a == 0 {
+                        self.ip = b as usize
+                    } else {
+                        self.ip += 3
+                    }
+                }
 
-                7 => { // less than
+                7 => {
+                    // less than
                     let (a, b, c) = self.get_params3();
                     *c = if a < b { 1 } else { 0 };
                     self.ip += 4;
-                },
+                }
 
-                8 => { // equal
+                8 => {
+                    // equal
                     let (a, b, c) = self.get_params3();
                     *c = if a == b { 1 } else { 0 };
                     self.ip += 4;
-                },
-
-                99 => { 
-                    self.state = State::Stopped;
-                    return Ok(self) 
                 }
-                _ => return Err(format!("Unknown operand: {} at byte: {}", self.code[self.ip], self.ip))
+
+                99 => {
+                    self.state = State::Stopped;
+                    return Ok(self);
+                }
+                _ => {
+                    return Err(format!(
+                        "Unknown operand: {} at byte: {}",
+                        self.code[self.ip], self.ip
+                    ))
+                }
             }
         }
     }
 
     fn get_params2(&mut self) -> (isize, isize) {
         let a = match self.code[self.ip] / 100 % 10 {
-            0 => { self.code[self.code[self.ip + 1] as usize]},
-            1 => { self.code[self.ip + 1] },
-            _ => { 0 },
+            0 => self.code[self.code[self.ip + 1] as usize],
+            1 => self.code[self.ip + 1],
+            _ => 0,
         };
         let b = match self.code[self.ip] / 1000 % 10 {
-            0 => { self.code[self.code[self.ip + 2] as usize]},
-            1 => { self.code[self.ip + 2] },
-            _ => { 0 },
+            0 => self.code[self.code[self.ip + 2] as usize],
+            1 => self.code[self.ip + 2],
+            _ => 0,
         };
         // let target = self.code[self.ip + 3] as usize;
         (a, b)
@@ -132,14 +158,14 @@ impl Computer {
 
     fn get_params3(&mut self) -> (isize, isize, &mut isize) {
         let a = match self.code[self.ip] / 100 % 10 {
-            0 => { self.code[self.code[self.ip + 1] as usize]},
-            1 => { self.code[self.ip + 1] },
-            _ => { 0 },
+            0 => self.code[self.code[self.ip + 1] as usize],
+            1 => self.code[self.ip + 1],
+            _ => 0,
         };
         let b = match self.code[self.ip] / 1000 % 10 {
-            0 => { self.code[self.code[self.ip + 2] as usize]},
-            1 => { self.code[self.ip + 2] },
-            _ => { 0 },
+            0 => self.code[self.code[self.ip + 2] as usize],
+            1 => self.code[self.ip + 2],
+            _ => 0,
         };
         let target = self.code[self.ip + 3] as usize;
         (a, b, &mut self.code[target])
@@ -147,9 +173,9 @@ impl Computer {
 
     fn get_param1(&mut self) -> isize {
         let a = match self.code[self.ip] / 100 % 10 {
-            0 => { self.code[self.code[self.ip + 1] as usize]},
-            1 => { self.code[self.ip + 1] },
-            _ => { 0 },
+            0 => self.code[self.code[self.ip + 1] as usize],
+            1 => self.code[self.ip + 1],
+            _ => 0,
         };
         a
     }

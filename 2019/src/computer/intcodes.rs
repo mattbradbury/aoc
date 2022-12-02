@@ -1,14 +1,22 @@
-use std::{str::FromStr, num::ParseIntError, ops::{Deref, Index, IndexMut}};
-
+use std::{
+    num::ParseIntError,
+    ops::{Deref, Index, IndexMut},
+    str::FromStr,
+};
 
 #[derive(Debug, Clone)]
 pub struct Intcodes(Vec<isize>);
 
-impl FromStr for  Intcodes {
+impl FromStr for Intcodes {
     type Err = ParseIntError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s.trim().split(',').map(|v| v.parse()).collect::<Result<Vec<_>,_>>() {
+        match s
+            .trim()
+            .split(',')
+            .map(|v| v.parse())
+            .collect::<Result<Vec<_>, _>>()
+        {
             Ok(res) => Ok(Intcodes(res)),
             Err(e) => Err(e),
         }
@@ -39,16 +47,14 @@ impl IndexMut<usize> for Intcodes {
 
 #[cfg(test)]
 mod tests {
-    use std::{str::FromStr, num::IntErrorKind};
+    use std::{num::IntErrorKind, str::FromStr};
 
     use crate::computer::Intcodes;
 
+    const EXAMPLE1: &str = "1,0,0,0,99";
+    const EXAMPLE1_ARR: [isize; 5] = [1, 0, 0, 0, 99];
 
-    const EXAMPLE1:&str = "1,0,0,0,99";
-    const EXAMPLE1_ARR:[isize; 5] = [1,0,0,0,99];
-
-    const EXAMPLE2:&str = "1,0,0,0,99r";
-
+    const EXAMPLE2: &str = "1,0,0,0,99r";
 
     #[test]
     fn test_from_str() {
@@ -64,6 +70,4 @@ mod tests {
     fn test_from_str_empty() {
         assert!(*Intcodes::from_str("").expect_err("").kind() == IntErrorKind::Empty)
     }
-
-
 }

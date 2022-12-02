@@ -9,7 +9,10 @@ fn main() {
     bench(|| part2(&input));
 }
 
-fn bench<F>(f: F) where F: FnOnce() {
+fn bench<F>(f: F)
+where
+    F: FnOnce(),
+{
     let t0 = time::Instant::now();
     let ret = f();
     println!("time used {:?}", time::Instant::now().duration_since(t0));
@@ -18,15 +21,11 @@ fn bench<F>(f: F) where F: FnOnce() {
 }
 
 #[allow(dead_code)]
-fn parse_input(_input: &str) {
+fn parse_input(_input: &str) {}
 
-}
+fn part1(_input: &str) {}
 
-fn part1(_input: &str) {
-}
-
-fn part2(_input: &str) {
-}
+fn part2(_input: &str) {}
 
 #[cfg(test)]
 mod tests {

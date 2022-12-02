@@ -1,4 +1,4 @@
-use std::{time, str::FromStr};
+use std::{str::FromStr, time};
 
 use aoc_2019::computer::Intcodes;
 use aoc_helper::load_input;
@@ -9,7 +9,10 @@ fn main() {
     bench(|| part2(code));
 }
 
-fn bench<F>(f: F) where F: FnOnce() {
+fn bench<F>(f: F)
+where
+    F: FnOnce(),
+{
     let t0 = time::Instant::now();
     let ret = f();
     println!("time used {:?}", time::Instant::now().duration_since(t0));
@@ -17,8 +20,7 @@ fn bench<F>(f: F) where F: FnOnce() {
     ret
 }
 
-fn part1(_code: Intcodes) {
-}
+fn part1(_code: Intcodes) {}
 
 fn part2(_code: Intcodes) {
     let _input = load_input(0, 0);

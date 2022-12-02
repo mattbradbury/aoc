@@ -6,3 +6,13 @@ edition = "2021"
 [dependencies]
 itertools = "0.10.1"
 aoc_helper = { path = "../helper" }
+scan_fmt = "0.2"
+bitvec = "0.22"
+hex = "0.4"
+nalgebra = "0.29"
+fxhash = "*"
+pathfinding = "3.0"
+
+
+[profile.bench]
+debug = true

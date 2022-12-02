@@ -1,0 +1,11 @@
+[package]
+name = "aoc-2017"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+itertools = "0.10.1"
+aoc_helper = { path = "../helper" } 
+bitvec = "1.0.0"
+thiserror = "1.0.31"
+simple-grid = "2.1.1"
